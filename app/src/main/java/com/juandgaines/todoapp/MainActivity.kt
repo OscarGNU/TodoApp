@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.juandgaines.todoapp.ui.components.HelloWorld
 import com.juandgaines.todoapp.ui.theme.TodoAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,11 +18,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TodoAppTheme {
+            TodoAppTheme() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     HelloWorld(
-                        modifier = Modifier.fillMaxSize()
-                            .padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding)
+
                     )
                 }
             }
@@ -29,12 +30,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun HelloWorld(
-    modifier: Modifier = Modifier
-) {
-    Text(
-        text = "Hello, World!",
-        modifier = modifier
-    )
-}
