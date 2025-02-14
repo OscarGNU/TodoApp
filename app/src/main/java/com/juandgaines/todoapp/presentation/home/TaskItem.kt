@@ -1,13 +1,17 @@
 package com.juandgaines.todoapp.presentation.home
 
-import android.service.autofill.OnClickAction
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.juandgaines.todoapp.domain.Category
 import com.juandgaines.todoapp.domain.Task
 
 @Composable
@@ -28,6 +34,7 @@ fun taskItem (
     task: Task,
 ){
     Row (
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .clickable {
                 onClickItem(task.id)
@@ -41,12 +48,12 @@ fun taskItem (
             checked = task.isCompleted,
             onCheckedChange = {
                 onToggleCompletion(task)
-            }
+            },
         )
 
         Column (
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier
                 .padding(8.dp)
                 .weight(1f)
@@ -65,16 +72,55 @@ fun taskItem (
                 task.description?.let{
                     Text(
                         text = it,
-                        maxLines =2,
+                        maxLines =1,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.inverseOnSurface
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                task.category?.let {
+                    Text(
+                        text = it.toString(),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
 
         }
+        Box{
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = "Delete",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clickable {
+                        onDeleteItem(task.id)
+                    }
+
+            )
+        }
 
     }
 
+}
+
+@Composable
+@Preview (showBackground = true)
+fun TaskItemPreview(){
+    MaterialTheme{
+        taskItem(
+            task = Task(
+                id = "1",
+                title = "Task 1",
+                description = "Description 1",
+                category = Category.WORDK,
+                isCompleted = false
+            ),
+            onClickItem ={},
+            onDeleteItem = {},
+            onToggleCompletion = {}
+        )
+    }
 }
