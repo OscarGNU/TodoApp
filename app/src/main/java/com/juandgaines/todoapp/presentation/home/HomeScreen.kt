@@ -109,16 +109,19 @@ fun HomeScreen(
                 item {
                     SummaryInfo(
                         date = state.date,
-                        taskSummary = state.summary
+                        tasksSummary = state.summary
                     )
                 }
 
                 stickyHeader{
-                    SectionTitle(modifier = Modifier
+                    SectionTitle(
+                        modifier = Modifier
                             .fillParentMaxWidth()
                             .background(
                                 color = MaterialTheme.colorScheme.surface
-                            ), title = stringResource(R.string.completed_tasks))
+                            ),
+                        title = stringResource(R.string.completed_tasks)
+                    )
                 }
 
                 items(
@@ -194,7 +197,7 @@ fun HomeScreenPreviewLight(
 
 @Preview(
     showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
 fun HomeScreenPreviewDark(
