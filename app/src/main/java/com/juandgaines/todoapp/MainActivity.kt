@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.juandgaines.todoapp.data.FakeTaskLocalDataSource
 import com.juandgaines.todoapp.domain.Task
+import com.juandgaines.todoapp.presentation.home.HomeScreenRoot
 import com.juandgaines.todoapp.ui.theme.TodoAppTheme
 import kotlinx.coroutines.launch
 
@@ -24,8 +25,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TodoAppTheme() {
-                val fakeDatasource = FakeTaskLocalDataSource
+            TodoAppTheme {
+                HomeScreenRoot()
+               /* val fakeDatasource = FakeTaskLocalDataSource
 
                 var text by remember { mutableStateOf("") }
                 LaunchedEffect(true) {
@@ -72,6 +74,8 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                     )
                 }
+
+                */
             }
         }
     }
