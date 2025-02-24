@@ -14,7 +14,6 @@ object FakeTaskLocalDataSource: TaskLocalDataSource {
     init {
         _tasksFlow.value = completedTask + pendingTask
     }
-
     override val tasksFlow: Flow<List<Task>>
         get() = _tasksFlow
 
@@ -52,8 +51,8 @@ object FakeTaskLocalDataSource: TaskLocalDataSource {
         return _tasksFlow.value.find { it.id == taskId }
     }
 
-    override fun removeAllTasks() {
-        TODO("Not yet implemented")
+    override suspend fun removeAllTasks() {
+        delay(1000L)
+        _tasksFlow.value = emptyList()
     }
 }
-
