@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import com.juandgaines.todoapp.data.FakeTaskLocalDataSource
 import com.juandgaines.todoapp.domain.Task
 import com.juandgaines.todoapp.presentation.home.HomeScreenRoot
+import com.juandgaines.todoapp.presentation.screen.detail.TaskScreen
+import com.juandgaines.todoapp.presentation.screen.detail.TaskScreenState
 import com.juandgaines.todoapp.ui.theme.TodoAppTheme
 import kotlinx.coroutines.launch
 
@@ -26,7 +28,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TodoAppTheme {
-                HomeScreenRoot()
+                TaskScreen(state = TaskScreenState())
                /* val fakeDatasource = FakeTaskLocalDataSource
 
                 var text by remember { mutableStateOf("") }
