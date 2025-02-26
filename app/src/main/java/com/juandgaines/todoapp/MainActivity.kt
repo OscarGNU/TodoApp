@@ -18,6 +18,7 @@ import com.juandgaines.todoapp.data.FakeTaskLocalDataSource
 import com.juandgaines.todoapp.domain.Task
 import com.juandgaines.todoapp.presentation.home.HomeScreenRoot
 import com.juandgaines.todoapp.presentation.screen.detail.TaskScreen
+import com.juandgaines.todoapp.presentation.screen.detail.TaskScreenRoot
 import com.juandgaines.todoapp.presentation.screen.detail.TaskScreenState
 import com.juandgaines.todoapp.ui.theme.TodoAppTheme
 import kotlinx.coroutines.launch
@@ -28,56 +29,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TodoAppTheme {
-                TaskScreen(state = TaskScreenState())
-               /* val fakeDatasource = FakeTaskLocalDataSource
+                TaskScreenRoot()
 
-                var text by remember { mutableStateOf("") }
-                LaunchedEffect(true) {
-
-                    launch {
-                        fakeDatasource.tasksFlow.collect {
-                            Log.d("MainActivity", "Tasks: $it")
-                            text = it.toString()
-                        }
-                    }
-
-                    launch {
-                        fakeDatasource.addTask(
-                            Task(
-                                id = "1",
-                                title = "Task 1",
-                                description = "Description 1"
-                            )
-                        )
-                        fakeDatasource.addTask(
-                            Task(
-                                id = "2",
-                                title = "Task 2",
-                                description = "Description 2"
-                            )
-                        )
-
-                        fakeDatasource.getTaskById("1")?.let {
-                            val updatedTask = it.copy(title = "Updated Task 1")
-                            fakeDatasource.updateTask(updatedTask)
-                        }
-
-                        fakeDatasource.deleteAllTasks()
-                    }
-                }
-
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Text(
-                        text = text,
-                        modifier = Modifier
-                            .padding(
-                                top = innerPadding.calculateTopPadding()
-                            )
-                            .fillMaxSize()
-                    )
-                }
-
-                */
             }
         }
     }

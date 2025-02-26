@@ -3,8 +3,9 @@
 package com.juandgaines.todoapp.presentation.screen.detail
 
 
-import android.content.res.Configuration
+
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,7 +20,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -31,6 +35,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,21 +43,56 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.juandgaines.todoapp.R
 import com.juandgaines.todoapp.domain.Category
 
 import com.juandgaines.todoapp.ui.theme.TodoAppTheme
+import java.nio.file.WatchEvent
 
+
+@Composable
+fun  TaskScreenRoot(){
+    val viewModel = viewModel <TaskViewModel>()
+    val state = viewModel.state
+    val event = viewModel.event
+
+    val context = LocalContext.current
+
+    LaunchedEffect (true){
+
+        event.collect{event->
+            when(event){
+                is TaskEvent.TaskCreated->{
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.task_save),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+        }
+
+    }
+    TaskScreen(
+        state = state,
+        onActionTask = viewModel:: onAction
+    )
+
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskScreen(
     modifier: Modifier = Modifier,
-    state: TaskScreenState
+    state: TaskScreenState,
+    onActionTask: (ActionTask) -> Unit
 ) {
 
     var isDescriptionFocus by remember {
@@ -70,6 +110,18 @@ fun TaskScreen(
                         style = MaterialTheme.typography.headlineSmall,
                         text = stringResource(R.string.task)
                     )
+                },
+                navigationIcon = {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.clickable {
+                            onActionTask(
+                                ActionTask.Back
+                            )
+                        }
+                        )
                 }
             )
         }
@@ -96,6 +148,9 @@ fun TaskScreen(
                 Checkbox(
                     checked = state.isTaskDone,
                     onCheckedChange = {
+                                      onActionTask(
+                                          ActionTask.ChangeTaskDone(it)
+                                      )
 
                     },
                 )
@@ -152,6 +207,8 @@ fun TaskScreen(
                                                 8.dp
                                             )
                                             .clickable {
+                                                onActionTask(ActionTask.ChangeTaskCategory(category))
+                                                isExpanded = false
 
                                             }
                                     )
@@ -165,24 +222,22 @@ fun TaskScreen(
             }
 
             BasicTextField(
-                value = state.taskName,
+                state = state.taskName,
                 textStyle = MaterialTheme.typography.headlineLarge.copy(
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 ),
-                maxLines = 1,
-                onValueChange = {
+               lineLimits = TextFieldLineLimits.SingleLine,
 
-                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
                 ,
-                decorationBox = { innerBox ->
+                decorator = { innerBox ->
                     Column (
                         modifier = Modifier.fillMaxWidth(),
                     ){
-                        if(state.taskName.isEmpty()){
+                        if(state.taskName.text.toString().isEmpty()){
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = stringResource(R.string.task_name),
@@ -201,23 +256,20 @@ fun TaskScreen(
                 }
             )
             BasicTextField(
-                value = state.taskDescription ?: "",
+                state = state.taskDescription,
                 textStyle = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onSurface
                 ),
-                maxLines = 15,
-                onValueChange = {
 
-                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .onFocusChanged {
                         isDescriptionFocus = it.isFocused
                     }
                 ,
-                decorationBox = { innerBox ->
+                decorator = { innerBox ->
                     Column {
-                        if(state.taskDescription.isNullOrEmpty() && !isDescriptionFocus){
+                        if(state.taskDescription.text.toString().isEmpty() && !isDescriptionFocus){
                             Text(
                                 text = stringResource(R.string.task_description),
                                 color = MaterialTheme.colorScheme.onSurface.copy(
@@ -257,7 +309,8 @@ fun TaskScreenLightPreview(
 ){
     TodoAppTheme {
         TaskScreen(
-            state = state
+            state = state,
+                    onActionTask ={}
         )
     }
 }
@@ -271,15 +324,10 @@ fun TaskScreenDarkPreview(
 ){
     TodoAppTheme {
         TaskScreen(
-            state = state
+            state = state,
+            onActionTask ={}
         )
     }
 }
 
 
-data class TaskScreenState(
-    val taskName: String = "",
-    val taskDescription: String? = null,
-    val category:Category?  = null,
-    val isTaskDone : Boolean = false,
-)
