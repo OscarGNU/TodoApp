@@ -286,7 +286,11 @@ fun TaskScreen(
                 modifier = Modifier.weight(1f)
             )
             Button(
-                onClick = {  },
+                onClick = {
+                          onActionTask(
+                              ActionTask.SaveTask
+                          )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(46.dp)
