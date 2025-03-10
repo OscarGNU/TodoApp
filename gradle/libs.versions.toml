@@ -17,6 +17,7 @@ navigationComposeHilt = "1.2.0"
 room = "2.6.1"
 uiTextGoogleFonts = "1.7.7"
 navigationRuntimeAndroid = "2.9.0-alpha07"
+navigationComposeVersion = "2.8.8"
 
 
 [libraries]
@@ -57,6 +58,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationComposeVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

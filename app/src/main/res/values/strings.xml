@@ -15,4 +15,5 @@
   <string name="save">save</string>
     <string name="task_created">task created</string>
   <string name="task_save">Task Save</string>
+    <string name="summary">summary</string>
 </resources>

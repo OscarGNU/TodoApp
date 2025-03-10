@@ -40,14 +40,15 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.juandgaines.todoapp.R
-import com.juandgaines.todoapp.domain.Task
 import com.juandgaines.todoapp.ui.theme.TodoAppTheme
 
 
 
 
 @Composable
-fun HomeScreenRoot(){
+fun HomeScreenRoot(
+    navigateToTaskScreen: () -> Unit
+) {
     val viewModel:HomeScreenViewModel = viewModel<HomeScreenViewModel>()
     val state = viewModel.state
     val event = viewModel.events
@@ -73,7 +74,14 @@ fun HomeScreenRoot(){
     }
     HomeScreen(
         state = state,
-        onAction = viewModel::onAction
+        onAction = { action ->
+            when(action){
+                HomeScreenAction.OnAddTask->{
+                    navigateToTaskScreen()
+                }
+                else -> viewModel.onAction(action)
+            }
+        }
     )
 }
 
@@ -99,9 +107,11 @@ fun HomeScreen(
                 },
                 actions = {
                     Box (
-                        modifier= Modifier.padding(8.dp).clickable {
-                            isMenuExtended = true
-                        }
+                        modifier= Modifier
+                            .padding(8.dp)
+                            .clickable {
+                                isMenuExtended = true
+                            }
                     ){
                         Icon(
                             imageVector = Icons.Default.MoreVert,
@@ -135,16 +145,17 @@ fun HomeScreen(
         content = { paddingValues ->
 
             LazyColumn (
-                modifier = Modifier.padding( paddingValues = paddingValues )
+                modifier = Modifier
+                    .padding(paddingValues = paddingValues)
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(
-                    4.dp
+                    8.dp
                 )
             ){
                 item {
                     SummaryInfo(
                         date = state.date,
-                        tasksSummary = state.summary,
+                        tasksSummary = stringResource(R.string.summary, state.summary),
                         completedTasks = state.completedTask.size,
                         totalTask = state.completedTask.size + state.pendingTask.size
                     )
@@ -152,9 +163,11 @@ fun HomeScreen(
 
                 stickyHeader{
                     SectionTitle(
-                        modifier = Modifier.background(
-                            color = MaterialTheme.colorScheme.surface
-                        ).fillParentMaxWidth(),
+                        modifier = Modifier
+                            .background(
+                                color = MaterialTheme.colorScheme.surface
+                            )
+                            .fillParentMaxWidth(),
                         title = stringResource(R.string.pending_tasks)
                     )
                 }
@@ -219,13 +232,16 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { }
+                onClick = {
+                    onAction(HomeScreenAction.OnAddTask)
+                }
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add Task")
             }
         }
     )
 }
+
 
 @Preview
 @Composable
