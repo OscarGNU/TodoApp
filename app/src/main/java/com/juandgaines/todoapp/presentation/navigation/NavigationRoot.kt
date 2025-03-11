@@ -26,7 +26,7 @@ fun NavigationRoot (
             composable<HomeScreenDes>{
                 HomeScreenRoot(
                     navigateToTaskScreen = {
-                        navController.navigate(TaskScreenDes)
+                        navController.navigate(TaskScreenDes(it))
                     }
                 )
             }
@@ -46,4 +46,6 @@ fun NavigationRoot (
 object HomeScreenDes
 
 @Serializable
-object TaskScreenDes
+data class TaskScreenDes(
+    val taskId: String? = null
+)
