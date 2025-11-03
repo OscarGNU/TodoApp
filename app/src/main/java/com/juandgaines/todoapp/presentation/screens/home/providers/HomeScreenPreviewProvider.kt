@@ -1,13 +1,13 @@
-package com.juandgaines.todoapp.presentation.home
+package com.juandgaines.todoapp.presentation.screens.home.providers
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.juandgaines.todoapp.domain.Category
 import com.juandgaines.todoapp.domain.Task
 
-class HomeScreenPreviewProvider:PreviewParameterProvider<HomeDataState> {
-    override val values: Sequence<HomeDataState>
+class HomeScreenPreviewProvider:PreviewParameterProvider<com.juandgaines.todoapp.presentation.screens.home.HomeDataState> {
+    override val values: Sequence<com.juandgaines.todoapp.presentation.screens.home.HomeDataState>
         get() = sequenceOf(
-            HomeDataState(
+            _root_ide_package_.com.juandgaines.todoapp.presentation.home.HomeDataState(
                 date = "March 9, 2024",
                 summary = "5 incomplete, 5 completed",
                 completedTask = completedTask,

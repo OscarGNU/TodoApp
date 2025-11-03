@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.juandgaines.todoapp.presentation.home.HomeScreenRoot
+import com.juandgaines.todoapp.presentation.screens.home.HomeScreenRoot
 import com.juandgaines.todoapp.presentation.screen.detail.TaskScreenRoot
 
 import kotlinx.serialization.Serializable

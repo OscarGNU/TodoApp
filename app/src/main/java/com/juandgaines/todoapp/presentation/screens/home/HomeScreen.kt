@@ -1,4 +1,4 @@
-package com.juandgaines.todoapp.presentation.home
+package com.juandgaines.todoapp.presentation.screens.home
 
 
 import android.widget.Toast
@@ -40,6 +40,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.juandgaines.todoapp.R
+import com.juandgaines.todoapp.presentation.screens.home.components.SectionTitle
+import com.juandgaines.todoapp.presentation.screens.home.components.SummaryInfo
+import com.juandgaines.todoapp.presentation.screens.home.components.taskItem
+import com.juandgaines.todoapp.presentation.screens.home.providers.HomeScreenPreviewProvider
 import com.juandgaines.todoapp.ui.theme.TodoAppTheme
 
 
@@ -186,7 +190,7 @@ fun HomeScreen(
                             )
                             .animateItem(),
                         task = task,
-                        onClickItem = { onAction(HomeScreenAction.onClickTask(task.id))},
+                        onClickItem = { onAction(HomeScreenAction.onClickTask(task.id)) },
                         onDeleteItem = {
                             onAction(HomeScreenAction.OnDeleteTask(task))
                         },
@@ -219,7 +223,7 @@ fun HomeScreen(
                             .animateItem(),
                         task = task,
                         onClickItem = {
-                                      onAction(HomeScreenAction.onClickTask(task.id))
+                            onAction(HomeScreenAction.onClickTask(task.id))
 
                         },
                         onDeleteItem = {

@@ -1,14 +1,18 @@
-package com.juandgaines.todoapp.presentation.home
+package com.juandgaines.todoapp.presentation.screens.home
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.juandgaines.todoapp.data.FakeTaskLocalDataSource
-import com.juandgaines.todoapp.presentation.home.HomeScreenAction.OnDeleteAllTasks
-import com.juandgaines.todoapp.presentation.home.HomeScreenAction.OnDeleteTask
-import com.juandgaines.todoapp.presentation.home.HomeScreenAction.OnToggleTask
+import com.juandgaines.todoapp.presentation.screens.home.HomeScreenAction.OnDeleteAllTasks
+import com.juandgaines.todoapp.presentation.screens.home.HomeScreenAction.OnDeleteTask
+import com.juandgaines.todoapp.presentation.screens.home.HomeScreenAction.OnToggleTask
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -16,6 +20,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+
+
 
 class HomeScreenViewModel:ViewModel() {
     private val taskLocalDataSource = FakeTaskLocalDataSource
@@ -75,5 +81,17 @@ class HomeScreenViewModel:ViewModel() {
             }
         }
     }
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val savedStateHandle = createSavedStateHandle()
+                val application = this[AndroidViewModelFactory.APPLICATION_KEY] as TodoApplication
+                val dataSource = application.dataSource
 
-}
+                HomeScreenViewModel(
+                    taskLocalDataSource = dataSource,
+                    savedStateHandle = savedStateHandle
+                )
+            }
+        }
+    }

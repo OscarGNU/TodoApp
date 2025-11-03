@@ -2,8 +2,8 @@ package com.juandgaines.todoapp.data
 
 import com.juandgaines.todoapp.domain.Task
 import com.juandgaines.todoapp.domain.TaskLocalDataSource
-import com.juandgaines.todoapp.presentation.home.completedTask
-import com.juandgaines.todoapp.presentation.home.pendingTask
+import com.juandgaines.todoapp.presentation.screens.home.providers.completedTask
+import com.juandgaines.todoapp.presentation.screens.home.providers.pendingTask
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,10 +41,7 @@ object FakeTaskLocalDataSource: TaskLocalDataSource {
         _tasksFlow.value = tasks
     }
 
-    override suspend fun deleteAllTasks() {
-        delay(1000L)
-        _tasksFlow.value = emptyList()
-    }
+
 
     override suspend fun getTaskById(taskId: String): Task? {
         delay(1000L)

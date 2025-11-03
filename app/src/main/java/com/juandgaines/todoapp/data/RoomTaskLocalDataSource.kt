@@ -5,35 +5,38 @@ import com.juandgaines.todoapp.domain.TaskLocalDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class RoomTaskLocalDataSource (
     private val taskDao: TaskDao,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO
 ): TaskLocalDataSource {
     override val tasksFlow: Flow<List<Task>>
-        get() = TODO("Not yet implemented")
+        get() = taskDao.getAllTask().map {
+            it.map { taskEntity -> taskEntity.toTask() }
+        }.flowOn(dispatcherIO)
 
-    override suspend fun addTask(task: Task) {
-        TODO("Not yet implemented")
+    override suspend fun addTask(task: Task) = withContext(dispatcherIO) {
+        taskDao.upsertTask(TaskEntity.fromTask(task))
     }
 
-    override suspend fun updateTask(updatedTask: Task) {
-        TODO("Not yet implemented")
+    override suspend fun updateTask(updatedTask: Task) = withContext(dispatcherIO) {
+        taskDao.upsertTask(TaskEntity.fromTask(updatedTask))
     }
 
-    override suspend fun removeTask(task: Task) {
-        TODO("Not yet implemented")
+    override suspend fun removeTask(task: Task) = withContext(dispatcherIO) {
+        taskDao.deleteTasById(task.id)
     }
 
-    override suspend fun deleteAllTasks() {
-        TODO("Not yet implemented")
+
+
+    override suspend fun getTaskById(taskId: String): Task? = withContext(dispatcherIO) {
+        taskDao.getTaskById(taskId)?.toTask()
     }
 
-    override suspend fun getTaskById(taskId: String): Task? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun removeAllTasks() {
-        TODO("Not yet implemented")
+    override suspend fun removeAllTasks() = withContext(dispatcherIO){
+        taskDao.deleteAllTask()
     }
 }
